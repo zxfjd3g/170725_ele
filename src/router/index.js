@@ -7,6 +7,8 @@ import seller from '../pages/seller/seller.vue'
 Vue.use(VueRouter)
 
 export default new VueRouter({
+  // linkExactActiveClass:"xfz",
+  linkActiveClass:"active",
   routes: [
     {
       path: '/',
