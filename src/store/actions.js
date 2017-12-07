@@ -7,7 +7,7 @@ export default {
 
   reqGoods ({commit}) {
     // 发ajax请求, 获取数据
-    getGoods().then(reponse => {
+    getGoods().then(response => {
       const result = response.data // {code: 0, data: goods}
       if(result.code===RESULT_OK) {
         const goods = result.data
@@ -18,7 +18,7 @@ export default {
   },
 
   reqRatings ({commit}) {
-    getRatings().then(reponse => {
+    getRatings().then(response => {
       const result = response.data // {code: 0, data: goods}
       if(result.code===RESULT_OK) {
         const ratings = result.data
@@ -29,7 +29,7 @@ export default {
   },
 
   reqSeller ({commit}) {
-    getSeller().then(reponse => {
+    getSeller().then(response => {
       const result = response.data // {code: 0, data: goods}
       if(result.code===RESULT_OK) {
         const seller = result.data

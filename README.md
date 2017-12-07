@@ -1,3 +1,12 @@
+# 项目相关问题
+## 1. 问题1: 
+      Cannot read property '0' of undefined"
+      Cannot read property 'avatar' of null"
+    原因: 初始化数据对象为{}, 模板中使用了3层的表达式
+    解决: 使用v-if, 只有真正有数据进才显示
+    
+    
+    
 # day01
 ## 1. 项目开发准备
     如何描述项目: 整体功能 / 功能模块 / 主体技术 / 开发模式

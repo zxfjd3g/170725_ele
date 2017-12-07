@@ -2,38 +2,38 @@
   <div class="header">
     <div class="content-wrapper">
       <div class="avatar">
-        <img src="http://static.galileo.xiaojukeji.com/static/tms/seller_avatar_256px.jpg" >
+        <img :src="seller.avatar" >
       </div>
       <div class="content">
         <div class="title">
           <span class="brand"></span>
-          <span class="name">粥品香坊（回龙观）</span>
+          <span class="name">{{seller.name}}</span>
         </div>
         <div class="description">
-          蜂鸟专送/38分钟送达
+          {{seller.description}}/{{seller.deliveryTime}}分钟送达
         </div>
-        <div class="supports">
-          <span class="icon guarantee" ></span>
-          <span class="text">在线支付满28减5</span>
+        <div class="supports" v-if="seller.supports">
+          <span class="icon" :class="supportsClasses[seller.supports[0].type]"></span>
+          <span class="text">{{seller.supports[0].description}}</span>
         </div>
-        <div class="supports-counts">
-          <span>5个</span>
+        <div class="supports-counts" v-if="seller.supports" @click="toggleShow">
+          <span>{{seller.supports.length}}个</span>
           <span class="icon-keyboard_arrow_right"></span>
         </div>
       </div>
     </div>
-    <div class="bulletin-wrapper">
+    <div class="bulletin-wrapper" @click="toggleShow">
       <span class="bulletin-icon"></span>
-      <span class="bulletin-text">粥品香坊其烹饪粥料的秘方源于中国千年古法，在融和现代制作工艺，由世界烹饪大师屈浩先生领衔研发。坚守纯天然、0添加的良心品质深得消费者青睐，发展至今成为粥类的引领品牌。是2008年奥运会和2013年园博会指定餐饮服务商。</span>
+      <span class="bulletin-text">{{seller.bulletin}}</span>
       <span class="icon-keyboard_arrow_right bulletin-arrow"></span>
     </div>
     <div class="bg">
-      <img src="http://static.galileo.xiaojukeji.com/static/tms/seller_avatar_256px.jpg" alt="">
+      <img :src="seller.avatar" alt="">
     </div>
-    <div class="mask">
+    <div class="mask" v-show="isShow">
       <div class="mask-wrapper">
         <div class="mask-content">
-          <h1>晓飞猪蹄（西部硅谷）</h1>
+          <h1>{{seller.name}}</h1>
           <div class="stars-wrapper">
             <div class="stars stars-48">
               <span class="star on"></span>
@@ -50,25 +50,9 @@
           </div>
           <div class="list">
             <ul>
-              <li>
-                <span class="icon special"></span>
-                <span class="text">在线支付满28送晓飞张</span>
-              </li>
-              <li>
-                <span class="icon decrease"></span>
-                <span class="text">VC无限橙果汁全场8折</span>
-              </li>
-              <li>
-                <span class="icon decrease"></span>
-                <span class="text">单人精彩套餐</span>
-              </li>
-              <li>
-                <span class="icon decrease"></span>
-                <span class="text">该商家支持发票,请下单写好发票抬头</span>
-              </li>
-              <li>
-                <span class="icon special"></span>
-                <span class="text">已加入“外卖保”计划,食品安全保障</span>
+              <li v-for="(support, index) in seller.supports" :key="index">
+                <span class="icon" :class="supportsClasses[support.type]"></span>
+                <span class="text">{{support.description}}</span>
               </li>
             </ul>
           </div>
@@ -78,11 +62,11 @@
             <span class="line"></span>
           </div>
           <div class="content">
-            <p>粥品香坊其烹饪粥料的秘方源于中国千年古法，在融和现代制作工艺，由世界烹饪大师屈浩先生领衔研发。坚守纯天然、0添加的良心品质深得消费者青睐，发展至今成为粥类的引领品牌。是2008年奥运会和2013年园博会指定餐饮服务商。</p>
+            <p>{{seller.bulletin}}</p>
           </div>
         </div>
       </div>
-      <div class="mask-footer">
+      <div class="mask-footer" @click="toggleShow">
         <span class="icon-close"></span>
       </div>
     </div>
@@ -90,7 +74,25 @@
 </template>
 
 <script>
-  export default {}
+  import {mapState} from 'vuex'
+  export default {
+
+    data () {
+      return {
+        isShow: false,
+        supportsClasses: ['decrease', 'discount', 'guarantee', 'invoice', 'special']
+      }
+    },
+    computed: {
+      ...mapState(['seller'])
+    },
+
+    methods: {
+      toggleShow () {
+        this.isShow = !this.isShow
+      }
+    }
+  }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
