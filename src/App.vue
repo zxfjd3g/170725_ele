@@ -19,8 +19,25 @@
 </template>
 
 <script>
+  import axios from 'axios'
   import header from './components/header/header.vue'
   export default {
+
+    mounted () {
+      // 使用vue-reource发ajax请求express模拟的接口
+      this.$http.get('/api/seller')
+        .then(response => {
+          const result = response.data
+          console.log('vue-reource ', result)
+        })
+      // 使用axios发ajax请求mockjs模拟的接口
+      axios.get('/api2/seller')
+        .then(response => {
+          const result = response.data
+          console.log('axios ', result)
+        })
+    },
+
     components: {
       'ele-header': header
     }
