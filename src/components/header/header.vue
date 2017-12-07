@@ -30,50 +30,48 @@
     <div class="bg">
       <img :src="seller.avatar" alt="">
     </div>
-    <div class="mask" v-show="isShow">
-      <div class="mask-wrapper">
-        <div class="mask-content">
-          <h1>{{seller.name}}</h1>
-          <div class="stars-wrapper">
-            <div class="stars stars-48">
-              <span class="star on"></span>
-              <span class="star on"></span>
-              <span class="star on"></span>
-              <span class="star half"></span>
-              <span class="star off"></span>
+    <transition name="fade">
+      <div class="mask" v-show="isShow">
+        <div class="mask-wrapper">
+          <div class="mask-content">
+            <h1>{{seller.name}}</h1>
+            <div class="stars-wrapper">
+              <stars :score="seller.score" :size="48"></stars>
+            </div>
+            <div class="info">
+              <span class="line"></span>
+              <span class="text">优惠信息</span>
+              <span class="line"></span>
+            </div>
+            <div class="list">
+              <ul>
+                <li v-for="(support, index) in seller.supports" :key="index">
+                  <span class="icon" :class="supportsClasses[support.type]"></span>
+                  <span class="text">{{support.description}}</span>
+                </li>
+              </ul>
+            </div>
+            <div class="info">
+              <span class="line"></span>
+              <span class="text">商家公告</span>
+              <span class="line"></span>
+            </div>
+            <div class="content">
+              <p>{{seller.bulletin}}</p>
             </div>
           </div>
-          <div class="info">
-            <span class="line"></span>
-            <span class="text">优惠信息</span>
-            <span class="line"></span>
-          </div>
-          <div class="list">
-            <ul>
-              <li v-for="(support, index) in seller.supports" :key="index">
-                <span class="icon" :class="supportsClasses[support.type]"></span>
-                <span class="text">{{support.description}}</span>
-              </li>
-            </ul>
-          </div>
-          <div class="info">
-            <span class="line"></span>
-            <span class="text">商家公告</span>
-            <span class="line"></span>
-          </div>
-          <div class="content">
-            <p>{{seller.bulletin}}</p>
-          </div>
+        </div>
+        <div class="mask-footer" @click="toggleShow">
+          <span class="icon-close"></span>
         </div>
       </div>
-      <div class="mask-footer" @click="toggleShow">
-        <span class="icon-close"></span>
-      </div>
-    </div>
+    </transition>
+
   </div>
 </template>
 
 <script>
+  import stars from '../stars/stars.vue'
   import {mapState} from 'vuex'
   export default {
 
@@ -91,6 +89,10 @@
       toggleShow () {
         this.isShow = !this.isShow
       }
+    },
+
+    components: {
+      stars
     }
   }
 </script>
@@ -227,6 +229,10 @@
       height 100%
       background rgba(7,17,27,.8)
       overflow auto
+      &.fade-enter-active, &.fade-leave-active
+        transition opacity .5s
+      &.fade-enter, &.fade-leave-to
+        opacity 0
       .mask-wrapper
         clearFix()
         min-height 100%
@@ -243,52 +249,6 @@
           .stars-wrapper
             margin 16px 0 28px 0
             text-align center
-            .stars
-              display inline-block
-              .star
-                display inline-block
-                background-size 100% 100%
-                background-repeat no-repeat
-              &.stars-48
-                .star
-                  width 20px
-                  height 20px
-                  margin-right 20px
-                  &:last-child
-                    margin-right 0px
-                  &.on
-                    bg-image("../stars/star48_on")
-                  &.half
-                    bg-image("../stars/star48_half")
-                  &.off
-                    bg-image("../stars/star48_off")
-              &.stars-36
-                .star
-                  width 15px
-                  height 15px
-                  margin-right 15px
-                  &:last-child
-                    margin-right 0px
-                  &.on
-                    bg-image("../stars/star36_on")
-                  &.half
-                    bg-image("../stars/star36_half")
-                  &.off
-                    bg-image("../stars/star36_off")
-              &.stars-24
-                .star
-                  width 10px
-                  height 10px
-                  margin-right 10px
-                  &:last-child
-                    margin-right 0px
-                  &.on
-                    bg-image("../stars/star24_on")
-                  &.half
-                    bg-image("../stars/star24_half")
-                  &.off
-                    bg-image("../stars/star24_off")
-
 
           .info
             width 80%

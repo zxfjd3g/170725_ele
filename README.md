@@ -47,4 +47,4 @@
 # day03
 ## 1. 使用vuex
 ## 2. header动态组件
-## 3. star组件
+## 3. stars组件
