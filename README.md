@@ -82,4 +82,5 @@
     滑动右侧列表, 左侧同步更新
     
 ## 2. cartcontrol组件
+
 ## 3. shopcart组件
