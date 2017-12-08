@@ -20,31 +20,36 @@
 
       <div class="ball-container"></div>
 
-      <div class="shopcart-list" v-show="listShow">
-        <div class="list-header">
-          <h1 class="title">购物车</h1>
-          <span class="empty">清空</span>
-        </div>
+      <transition name="slide">
+        <div class="shopcart-list" v-show="listShow">
+          <div class="list-header">
+            <h1 class="title">购物车</h1>
+            <span class="empty">清空</span>
+          </div>
 
-        <div class="list-content">
-          <ul>
-            <li class="food" v-for="(food, index) in cartFoods" :key="index">
-              <span class="name">{{food.name}}</span>
-              <div class="price"><span>￥{{food.price}}</span></div>
-              <div class="cartcontrol-wrapper">
-                <cartcontrol :food="food" />
-              </div>
-            </li>
-          </ul>
+          <div class="list-content" ref="foods">
+            <ul>
+              <li class="food" v-for="(food, index) in cartFoods" :key="index">
+                <span class="name">{{food.name}}</span>
+                <div class="price"><span>￥{{food.price}}</span></div>
+                <div class="cartcontrol-wrapper">
+                  <cartcontrol :food="food" />
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
-      </div>
+      </transition>
     </div>
+    <transition name="fade">
+      <div class="list-mask" v-show="listShow" @click="toggleShow"></div>
+    </transition>
 
-    <div class="list-mask" v-show="listShow" @click="toggleShow"></div>
   </div>
 </template>
 
 <script>
+  import BScroll from 'better-scroll'
   import {mapGetters, mapState} from 'vuex'
   import cartcontrol from '../cartcontrol/cartcontrol.vue'
 
@@ -82,6 +87,22 @@
           this.isShow = false
           return false
         }
+
+        /*
+        单例对象: 只有一个实例
+            1. 在创建之前, 先判断是否已经存在, 只有不存在才创建
+            2. 创建之后, 保存起来
+         */
+        if(isShow) {
+          // this.$nextTick()
+          console.log('new BScroll()')
+          if(!this.scroll) {
+            this.scroll = new BScroll(this.$refs.foods, {
+              click: true
+            })
+          }
+        }
+
 
         return isShow
       }
@@ -207,11 +228,11 @@
       top: 0
       z-index: -1
       width: 100%
-      transform: translate3d(0, -100%, 0)
-      &.fold-enter-active, &.fold-leave-active
-        transition: all 0.5s
-      &.fold-enter, &.fold-leave-active
-        transform: translate3d(0, 0, 0)
+      transform translateY(-100%)
+      &.slide-enter-active, &.slide-leave-active
+        transition transform .3s
+      &.slide-enter, &.slide-leave-to
+        transform translateY(0)
       .list-header
         height: 40px
         line-height: 40px
