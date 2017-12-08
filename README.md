@@ -46,5 +46,29 @@
     
 # day03
 ## 1. 使用vuex
+    store/index | state | mutations | actions | getters | types
 ## 2. header动态组件
+    动态请求后台获取数据
+        api/index: 包含发送ajax请求的代码(不读取响应数据, 只是返回一个promise对象)
+        store/actions: 调用api发送ajax请求获取响应数据, 更新状态
+        在组件的mounted(): 通过this.$store.dispatch(actionName)触发action调用, ajax请求获取数据
+        在组件中: 利用mapState映射state中的seller数据成计算属性, 在模板中直接使用seller
+    过渡动画
 ## 3. stars组件
+    组件的作用
+        复用
+        简化
+    vue组件编写的流程
+        创建对应的文件夹和vue文件
+        分析并定义出组件的props/state
+        使用vue组件: 写标签, 并指定标签属性
+        vue文件的实现
+    在模板中需要的数据, 从哪取
+        data
+        props
+        computed    
+
+# day04
+## 1. goods组件
+## 2. cartcontrol组件
+## 3. shopcart组件
