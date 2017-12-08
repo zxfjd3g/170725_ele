@@ -5,7 +5,7 @@
         <ul>
           <!--current: 需要动态确认第几个li的class有current     currentIndex-->
           <li class="menu-item" v-for="(good, index) in goods"
-              :key="index" :class="{current: index===currentIndex}">
+              :key="index" :class="{current: index===currentIndex}" @click="clickMenuItem(index)">
             <span class="text border-1px">
               <span class="icon" :class="supportsClasses[good.type]" v-if="good.type>=0"></span>
               {{good.name}}
@@ -71,17 +71,23 @@
 
     methods: {
       _initScroll () {
-        new BScroll(this.$refs.menuWrapper)
-        const foodsScroll = new BScroll(this.$refs.foodsWrapper, { // 配置对象
-          probeType: 2 // 2代表只有手指滑动时才触发 3代表只要是滑动就会触发
+        new BScroll(this.$refs.menuWrapper, {
+          click: true
+        })
+        this.foodsScroll = new BScroll(this.$refs.foodsWrapper, { // 配置对象
+          probeType: 2, // 2代表只有手指滑动时才触发 3代表只要是滑动就会触发
+          click: true
         })
         // 绑定滚动的监听
-        foodsScroll.on('scroll', (event) => {
+        this.foodsScroll.on('scroll', (event) => {
           console.log(event.y)
+          // 更新scrollY
+          this.scrollY = Math.abs(event.y)
         })
 
-        foodsScroll.on('scrollEnd', (event) => {
+        this.foodsScroll.on('scrollEnd', (event) => {
           console.log('scrollEnd', event.y)
+          this.scrollY = Math.abs(event.y)
         })
       },
 
@@ -99,6 +105,12 @@
 
         // 更新状态
         this.tops = tops
+      },
+
+      clickMenuItem (index) {
+        console.log('clickMenuItem()', index)
+        this.scrollY = this.tops[index]
+        this.foodsScroll.scrollTo(0, -this.tops[index], 500)
       }
     },
 
@@ -106,8 +118,10 @@
       ...mapState(['goods']),
 
       currentIndex () {
-
-        return 0
+        const {scrollY, tops} = this
+        // 根据scrollY在tops中找到一个对应的下标
+        // scrollY>=top && scrollY<nextTop
+        return tops.findIndex((top, index) => scrollY>=top && scrollY<tops[index+1])
       }
     }
   }
