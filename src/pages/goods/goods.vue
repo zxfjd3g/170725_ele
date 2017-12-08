@@ -33,7 +33,9 @@
                     <span class="now">￥{{food.price}}</span>
                     <span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
                   </div>
-                  <div class="cartcontrol-wrapper">cartcontrol组件</div>
+                  <div class="cartcontrol-wrapper">
+                    <cartcontrol :food="food"/>
+                  </div>
                 </div>
               </li>
             </ul>
@@ -48,6 +50,7 @@
 <script>
   import BScroll from 'better-scroll'
   import {mapState} from 'vuex'
+  import cartcontrol from '../../components/cartcontrol/cartcontrol.vue'
 
   export default {
 
@@ -85,6 +88,7 @@
           this.scrollY = Math.abs(event.y)
         })
 
+        // 绑定滑动结束的监听
         this.foodsScroll.on('scrollEnd', (event) => {
           console.log('scrollEnd', event.y)
           this.scrollY = Math.abs(event.y)
@@ -123,6 +127,10 @@
         // scrollY>=top && scrollY<nextTop
         return tops.findIndex((top, index) => scrollY>=top && scrollY<tops[index+1])
       }
+    },
+
+    components: {
+      cartcontrol
     }
   }
 </script>

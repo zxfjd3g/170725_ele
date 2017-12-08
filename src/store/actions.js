@@ -1,5 +1,11 @@
 import {getGoods, getRatings, getSeller} from '../api'
-import {RECEIVE_GOODS, RECEIVE_RATINGS, RECEIVE_SELLER} from './types'
+import {
+  RECEIVE_GOODS,
+  RECEIVE_RATINGS,
+  RECEIVE_SELLER,
+  INCREMENT_FOOD_COUNT,
+  DECREMENT_FOOD_COUNT
+} from './types'
 // import * as api from '../api'
 
 const RESULT_OK = 0
@@ -41,5 +47,13 @@ export default {
         commit(RECEIVE_SELLER, {seller})
       }
     })
+  },
+
+  updateFoodCount ({commit}, {food, isAdd}) {
+    if(isAdd) { // 提交一个增加的请求
+      commit(INCREMENT_FOOD_COUNT, {food})
+    } else {// 提交一个减少的请求
+      commit(DECREMENT_FOOD_COUNT, {food})
+    }
   }
 }
