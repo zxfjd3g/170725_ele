@@ -5,7 +5,7 @@ import {RECEIVE_GOODS, RECEIVE_RATINGS, RECEIVE_SELLER} from './types'
 const RESULT_OK = 0
 export default {
 
-  reqGoods ({commit}) {
+  reqGoods ({commit}, callback) {
     // 发ajax请求, 获取数据
     getGoods().then(response => {
       const result = response.data // {code: 0, data: goods}
@@ -13,6 +13,9 @@ export default {
         const goods = result.data
         // 更新状态
         commit(RECEIVE_GOODS, {goods})
+
+        // 数据得到并更新了对应的状态, 通知调用者
+        callback && callback()
       }
     })
   },

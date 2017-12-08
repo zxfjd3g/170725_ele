@@ -1,10 +1,11 @@
 <template>
   <div>
     <div class="goods">
-      <div class="menu-wrapper">
+      <div class="menu-wrapper" ref="menuWrapper">
         <ul>
-          <!--current-->
-          <li class="menu-item" v-for="(good, index) in goods" :key="index">
+          <!--current: 需要动态确认第几个li的class有current     currentIndex-->
+          <li class="menu-item" v-for="(good, index) in goods"
+              :key="index" :class="{current: index===currentIndex}">
             <span class="text border-1px">
               <span class="icon" :class="supportsClasses[good.type]" v-if="good.type>=0"></span>
               {{good.name}}
@@ -12,7 +13,7 @@
           </li>
         </ul>
       </div>
-      <div class="foods-wrapper">
+      <div class="foods-wrapper" ref="foodsWrapper">
         <ul>
           <li class="food-list food-list-hook" v-for="(good, index) in goods" :key="index">
             <h1 class="title">{{good.name}}</h1>
@@ -45,22 +46,69 @@
 </template>
 
 <script>
+  import BScroll from 'better-scroll'
   import {mapState} from 'vuex'
 
   export default {
 
     data() {
       return {
-        supportsClasses: ['decrease', 'discount', 'guarantee', 'invoice', 'special']
+        supportsClasses: ['decrease', 'discount', 'guarantee', 'invoice', 'special'],
+        scrollY: 0,  //代表右侧列表滑动的Y轴坐标
+        tops: [] // 代表右侧所有分类li的top组件的数组
       }
     },
 
     mounted() {
-      this.$store.dispatch('reqGoods')
+      this.$store.dispatch('reqGoods', () => {// 数据已获取, 状态已更新
+        this.$nextTick(() => { // 界面更新后回调
+          this._initScroll()
+          this._initTops()
+        })
+      })
+      
+    },
+
+    methods: {
+      _initScroll () {
+        new BScroll(this.$refs.menuWrapper)
+        const foodsScroll = new BScroll(this.$refs.foodsWrapper, { // 配置对象
+          probeType: 2 // 2代表只有手指滑动时才触发 3代表只要是滑动就会触发
+        })
+        // 绑定滚动的监听
+        foodsScroll.on('scroll', (event) => {
+          console.log(event.y)
+        })
+
+        foodsScroll.on('scrollEnd', (event) => {
+          console.log('scrollEnd', event.y)
+        })
+      },
+
+      _initTops () {
+        const tops = []
+
+        let top = 0
+        tops.push(top)
+        const lis = this.$refs.foodsWrapper.getElementsByClassName('food-list-hook')
+        for (var i = 0,length=lis.length; i<length;  i++) {
+          var li = lis[i]
+          top += li.clientHeight
+          tops.push(top)
+        }
+
+        // 更新状态
+        this.tops = tops
+      }
     },
 
     computed: {
-      ...mapState(['goods'])
+      ...mapState(['goods']),
+
+      currentIndex () {
+
+        return 0
+      }
     }
   }
 </script>

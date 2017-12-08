@@ -4,7 +4,10 @@
       Cannot read property 'avatar' of null"
     原因: 初始化数据对象为{}, 模板中使用了3层的表达式
     解决: 使用v-if, 只有真正有数据进才显示
-    
+
+## 2. Cannot read property '$refs' of undefined
+    原因: 非组件的回调函数中的this不是组件对象
+    解决: 使用箭头函数定义回调函数    
     
     
 # day01
@@ -70,5 +73,10 @@
 
 # day04
 ## 1. goods组件
+    动态展现列表数据
+    基本滑动
+    点击左侧列表项, 右侧滑动到对应位置
+    滑动右侧列表, 左侧同步更新
+    
 ## 2. cartcontrol组件
 ## 3. shopcart组件
