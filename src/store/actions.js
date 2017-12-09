@@ -26,18 +26,20 @@ export default {
     })
   },
 
-  reqRatings ({commit}) {
+  reqRatings ({commit}, callback) {
     getRatings().then(response => {
       const result = response.data // {code: 0, data: goods}
       if(result.code===RESULT_OK) {
         const ratings = result.data
         // 更新状态
         commit(RECEIVE_RATINGS, {ratings})
+
+        callback && callback()
       }
     })
   },
 
-  reqSeller ({commit}) {
+  reqSeller ({commit}, callback) {
     getSeller().then(response => {
       const result = response.data // {code: 0, data: goods}
       if(result.code===RESULT_OK) {
@@ -45,6 +47,8 @@ export default {
         seller.score = 3.5
         // 更新状态
         commit(RECEIVE_SELLER, {seller})
+
+        callback && callback()
       }
     })
   },

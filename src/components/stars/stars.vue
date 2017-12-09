@@ -55,7 +55,7 @@
       .star
         width 20px
         height 20px
-        margin-right 20px
+        margin-right 10px
         &:last-child
           margin-right 0px
         &.on
@@ -68,7 +68,7 @@
       .star
         width 15px
         height 15px
-        margin-right 15px
+        margin-right 8px
         &:last-child
           margin-right 0px
         &.on
@@ -81,7 +81,7 @@
       .star
         width 10px
         height 10px
-        margin-right 10px
+        margin-right 5px
         &:last-child
           margin-right 0px
         &.on
