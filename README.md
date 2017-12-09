@@ -111,3 +111,7 @@
 ## 3. ratings组件
 
 ## 4. seller组件    
+
+## 5. vue插件
+    vue-lazyload
+    vue-scroller
