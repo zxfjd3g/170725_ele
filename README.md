@@ -1,18 +1,31 @@
 # 项目相关问题
-## 1. 问题1: 
+## 1. 初始化显示时出错
       Cannot read property '0' of undefined"
       Cannot read property 'avatar' of null"
     原因: 初始化数据对象为{}, 模板中使用了3层的表达式
     解决: 使用v-if, 只有真正有数据进才显示
 
-## 2. Cannot read property '$refs' of undefined
+## 2. 在组件中, 非组件的回调函数中更新状态, 界面不变化
     原因: 非组件的回调函数中的this不是组件对象
     解决: 使用箭头函数定义回调函数    
  
-## 3. 状态对象中的属性数据更新了, 但界面不更新   
-    原因: 新添加的属性没有数据绑定, 即使数据变化了, 也不可能更新界面
-    解决: Vue.set(obj, key, value) // 这样key就是响应式的
-    
+## 3. 创建好BScroll对象, 样式都生成了, 就是不能滑动
+    原因: 创建BScroll对象时, 列表没有显示(状态已经更新, 但列表更新是异步的)
+    解决: 在列表更新之后才创建BScroll对象: this.$nextTick(() => {创建BScroll对象})
+
+## 4. 更新状态数据, 对应的界面不变化
+    原因: 一般方法给一个已有绑定的对象中添加一个新的属性, 这个属性没有数据绑定
+    解决: this.$set(obj, 'xxx', value)才有数据绑定
+          Vue.set(obj, 'xxx', value)才有数据绑定
+
+## 5. 点击添加购物项, 会1次添加多个
+    原因: 创建了多个BScroll对象来管理同一个DOM元素
+    解决: 只创建一个BScroll对象 
+    扩展: 单例对象: 
+        创建前, 先判断是否已经存在, 只有不存在才创建
+        创建后, 保存创建的对象
+
+
 # day01
 ## 1. 项目开发准备
     如何描述项目: 整体功能 / 功能模块 / 主体技术 / 开发模式
@@ -53,6 +66,7 @@
 # day03
 ## 1. 使用vuex
     store/index | state | mutations | actions | getters | types
+    
 ## 2. header动态组件
     动态请求后台获取数据
         api/index: 包含发送ajax请求的代码(不读取响应数据, 只是返回一个promise对象)
@@ -60,6 +74,7 @@
         在组件的mounted(): 通过this.$store.dispatch(actionName)触发action调用, ajax请求获取数据
         在组件中: 利用mapState映射state中的seller数据成计算属性, 在模板中直接使用seller
     过渡动画
+    
 ## 3. stars组件
     组件的作用
         复用
@@ -82,5 +97,17 @@
     滑动右侧列表, 左侧同步更新
     
 ## 2. cartcontrol组件
-
+    使用vuex管理food的count
+    transition动画
+    
 ## 3. shopcart组件
+    BScroll的创建和刷新
+    
+# day05
+## 1. food组件
+
+## 2. ratingselect组件
+
+## 3. ratings组件
+
+## 4. seller组件    

@@ -96,11 +96,16 @@
         if(isShow) {
           // this.$nextTick()
           console.log('new BScroll()')
-          if(!this.scroll) {
-            this.scroll = new BScroll(this.$refs.foods, {
-              click: true
-            })
-          }
+          this.$nextTick(() => {
+            // 如果不存在创建并保存
+            if(!this.scroll) {
+              this.scroll = new BScroll(this.$refs.foods, {
+                click: true
+              })
+            } else {// 如果存在, 通知scroll刷新
+              this.scroll.refresh()
+            }
+          })
         }
 
 

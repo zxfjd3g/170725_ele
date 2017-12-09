@@ -18,7 +18,8 @@
           <li class="food-list food-list-hook" v-for="(good, index) in goods" :key="index">
             <h1 class="title">{{good.name}}</h1>
             <ul>
-              <li class="food-item border-1px" v-for="(food, index) in good.foods">
+              <li class="food-item border-1px"
+                  v-for="(food, index) in good.foods" @click="showFood(food)">
                 <div class="icon">
                   <img width="57" height="57" :src="food.icon">
                 </div>
@@ -45,6 +46,7 @@
       <shopcart />
     </div>
 
+    <food :food="food" ref="food"/>
   </div>
 </template>
 
@@ -53,6 +55,7 @@
   import {mapState} from 'vuex'
   import cartcontrol from '../../components/cartcontrol/cartcontrol.vue'
   import shopcart from '../../components/shopcart/shopcart.vue'
+  import food from '../../components/food/food.vue'
 
   export default {
 
@@ -60,7 +63,8 @@
       return {
         supportsClasses: ['decrease', 'discount', 'guarantee', 'invoice', 'special'],
         scrollY: 0,  //代表右侧列表滑动的Y轴坐标
-        tops: [] // 代表右侧所有分类li的top组件的数组
+        tops: [], // 代表右侧所有分类li的top组件的数组
+        food: {}
       }
     },
 
@@ -117,6 +121,15 @@
         console.log('clickMenuItem()', index)
         this.scrollY = this.tops[index]
         this.foodsScroll.scrollTo(0, -this.tops[index], 500)
+      },
+
+      showFood (food) {
+        // 指定food状态
+        this.food = food
+        // 显示food组件界面
+        // 总结: 父组件调用子组件对象的方法: 给子组件标签指定ref
+        // 子组件要调用父组件的方法: props
+        this.$refs.food.toggleShow()
       }
     },
 
@@ -133,7 +146,8 @@
 
     components: {
       cartcontrol,
-      shopcart
+      shopcart,
+      food
     }
   }
 </script>
