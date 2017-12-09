@@ -4,7 +4,7 @@ import store from './store'
 import App from './App.vue'
 import router from './router'
 import "./common/stylus/index.styl"
-
+import './filters'
 import './mock/mockServer'
 
 Vue.use(VueResource)  // 所有的组件对象都多了一个属性: $http
