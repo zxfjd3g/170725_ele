@@ -185,14 +185,17 @@
       enter (el) { // el是发生动画的ball div
         console.log('enter()')
 
-        // 强制重排重绘
+        /*// 强制重排重绘
         const temp = el.clientHeight
 
         // 当前帧更新之后指定行: 否则会立即起效果
         this.$nextTick(() => {
+
+        })*/
+        setTimeout(() => {
           el.style.transform = 'translateX(0)'
           el.children[0].style.transform = 'translateY(0)'
-        })
+        }, 10)
       },
       // 在进入动画结束时调用, 隐藏小球
       afterEnter (el) { // el是发生动画的ball div
