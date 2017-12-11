@@ -39,9 +39,10 @@ export const ratingMixin = {
         selectType: 0/1/2         对应的数据: rating.rateType  0/1
          */
         // 条件1: 如果onlyContent为false, 对文本没有要求, 如果onlyContent为true, 文本必须有内容
-        !onlyContent || rating.text.length > 0
+        //!onlyContent || rating.text.length > 0
         // 条件2: 如果selectType为2, 对rateType没有要求, 如果selectType为0/1, rateType必须与selectType相等
-        selectType === 2 || selectType === rating.rateType
+        // selectType === 2 || selectType === rating.rateType
+
         return (!onlyContent || rating.text.length > 0) && (selectType === 2 || selectType === rating.rateType)
       })
     }

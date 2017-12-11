@@ -1,7 +1,7 @@
-# 项目相关问题
+# 项目相关问题(重要)
 ## 1. 初始化显示时出错
-      Cannot read property '0' of undefined"
-      Cannot read property 'avatar' of null"
+     Cannot read property '0' of undefined"
+     Cannot read property 'avatar' of null"
     原因: 初始化数据对象为{}, 模板中使用了3层的表达式
     解决: 使用v-if, 只有真正有数据进才显示
 
@@ -24,7 +24,15 @@
     扩展: 单例对象: 
         创建前, 先判断是否已经存在, 只有不存在才创建
         创建后, 保存创建的对象
+        
+## 6. 点击添加购物项时, 同时还打开食物详情
+    原因: 外部元素也响应了点击事件, 因为事件有冒泡
+    解决: 停止事件冒泡 @click.stop="xxx"
 
+## 7. 如果从其它路由切换过来显示没有问题, 如果直接刷新当前路由就报错
+    原因: 两种访问的方式, 创建组件对象时, 传给组件对象的数据不一样
+    解决: 在初始化, 判断只有有数据时才创建Scroll对象    ---从其它路由跳转过来
+          监视数据的变化, 当数据变化时创建Scroll对象    ---在当前路由上刷新
 
 # day01
 ## 1. 项目开发准备
@@ -105,13 +113,42 @@
     
 # day05
 ## 1. food组件
-
+    父组件中调用子组件的方法: this.$refs.child.fn()
+    列表的过滤显示: 计算属性-->arr.filter()-->
+    
 ## 2. ratingselect组件
-
+    父子组件通信: vue自定义事件机制
+        绑定事件监听: 父组件中, 通过子组件标签 @xxx='fn'
+        分发事件: 子组件中, this.$emit('xxx', data)
+        
 ## 3. ratings组件
-
+    多个组件重复的代码如何简化: minxin技术
+        在minxins中定义包含相同组件配置代码的对象
+        在多个组件中通过mixins配置引入定义在minxins中的代码
+        
 ## 4. seller组件    
-
+    异常问题的分析
+    数据监视
+    
 ## 5. vue插件
-    vue-lazyload
-    vue-scroller
+    1). vue-lazyload: 图片懒加载
+        npm install --save vue-lazyload
+        import VueLazyload from 'vue-lazyload'
+        import loading from './common/imgs/loading.gif'
+        Vue.use(VueLazyload, {
+          loading
+        }) // 内部会自定义一个全局指令 lazy来实现图片懒加载
+        <img v-lazy="food.image">
+    2). vue-scroller: 界面滑动
+        npm install --save vue-scroller@2.2.1
+        import VueScroller from 'vue-scroller'
+        Vue.use(VueScroller)
+        <scroller>列表div</scroller>
+
+# day05
+## 1. 小球动画
+    小球的平移动画的起始位置是动态确定的, 光通过样式无法搞定, 需要复用js来实现
+    小球动画在x轴和y轴上的变化效果不一样, 使用2层div来分别控制x轴和y轴
+## 2. 项目优化
+## 3. 百度地图API
+## 4. 短信验证登陆功能

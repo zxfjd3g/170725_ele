@@ -18,7 +18,17 @@
         </div>
       </div>
 
-      <div class="ball-container"></div>
+      <div class="ball-container">
+        <transition v-for="(ball, index) in balls"
+                    :key="index"
+                    v-on:before-enter="beforeEnter"
+                    v-on:enter="enter"
+                    v-on:after-enter="afterEnter">
+          <div class="ball" v-show="ball.isShow">
+            <div class="inner inner-hook"></div>
+          </div>
+        </transition>
+      </div>
 
       <transition name="slide">
         <div class="shopcart-list" v-show="listShow">
@@ -57,7 +67,15 @@
 
     data() {
       return {
-        isShow: false
+        isShow: false,
+        balls: [
+          {isShow: false},
+          {isShow: false},
+          {isShow: false},
+          {isShow: false},
+          {isShow: false},
+          {isShow: false}
+        ]
       }
     },
 
@@ -116,6 +134,26 @@
     methods: {
       toggleShow () {
         this.isShow = !this.isShow
+      },
+
+      // 在开始显示动画之前调用, 指定起始时的样式状态
+      beforeEnter (el) { // el是发生动画的ball div
+
+        let offsetX = 0
+        let offsetY = 0
+        // 计算
+
+
+        el.style.transform = `translateX(${offsetX}px)`
+        el.children[0].style.transform = `translate(${offsetY}px)`
+      },
+      // 在开始进入时调用, 指定结束时的样式状态
+      enter (el) { // el是发生动画的ball div
+
+      },
+      // 在进入动画结束时调用, 隐藏小球
+      afterEnter (el) { // el是发生动画的ball div
+
       }
     },
 
