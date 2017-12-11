@@ -155,6 +155,70 @@
     5). 强制重排与重绘
         https://www.cnblogs.com/zichi/p/4720000.html
 
-## 2. 项目优化
+## 2. vue UI库使用: mint-ui/element-ui/iview
+    引入mint-ui
+    实现按需自动打包使用的组件和样式
+    组件的分类
+        标签组件
+        函数组件
+
+## 3. 路由组件缓存与懒加载
+    路由组件缓存: 
+        <keep-alive><router-view/></keep-alive>
+    懒加载: 
+        import goods from '../pages/goods/goods.vue'
+        const goods = () => import('../pages/goods/goods.vue')
+        
 ## 3. 百度地图API
+    注册账号
+    进入控制台创建一个虚拟应用--> 得到AK
+    利用DEMO和类参考来实现自己的功能
+    
 ## 4. 短信验证登陆功能
+    1). 注册/登陆容联的账号
+        ACCOUNT SID：8aaf070855b647ab0155b9f80994058a
+        AUTH TOKEN：aa8aa679414e49df8908ea5b3d043c24
+        Rest URL(生产)：https://app.cloopen.com:8883
+        AppID(默认)：8aaf070855b647ab0155b9f809f90590
+    2). 添加测试号码: 
+        至少要有一个是你自己的
+    3). 后台应用
+        接口1: 处理发送验证的请求
+            地址: http://localhost:3000/sendcode
+            路由回调中:
+               1. 获取请求中手机号: phone
+               2. 生成一个随机数据验证码: code
+               3. 向容联的接口发请求, 传phone和code, 并向前台返回数据: {code:0}
+               4. 当容联的请求返回后, 如果成功, 保存phone和code: users[phone] = code
+        接口2: 处理登陆请求
+            地址: http://localhost:3000/login
+               1. 获取请求中手机号: phone和输入的验证码: code
+               2. 读取phone对应的code: users[phone], 与输入的验证码code进行比较
+               3. 如果不同, 返回一个响应标识登陆失败
+               4. 根据phone去数据库集合中查询对应的数据, 如果没有保存, 返回一个标识登陆成功的响应
+    4). 前台应用
+        地址: http://localhost:8081   相对于后台是跨域
+        利用proxy(代理)解决跨域的问题:
+            proxyTable: {
+              '/api': {
+                target: 'http://localhost:3000',
+                changeOrigin: true,
+                pathRewrite: {
+			      '^/api': '/'
+			    }
+              }
+            }
+        请求发送验证码: 
+            axios.get(`/api/sendcode?phone=${this.phone}`).then(response => {
+              alert(response.data.code) // 0
+            })
+        请求登陆:
+            axios.post('/api/login', {phone: this.phone, code: this.code}).then(response => {
+              const result = response.data
+              if (result.code == 0) {
+                const user = result.data
+                alert(`登陆成功: ${user.phone}`)
+              } else {
+                alert(`登陆失败, 请输入正确的手机号和验证码`)
+              }
+            })

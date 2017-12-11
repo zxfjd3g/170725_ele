@@ -47,7 +47,7 @@ router.get('/seller', function (req, res, next) { // 处理请求, 返回响应�
   })
 })
 // 4. 启用路由器
-app.use('/api', router)
+// app.use('/api', router)
 
 /*mock data end*/
 
