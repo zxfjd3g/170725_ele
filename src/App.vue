@@ -1,5 +1,14 @@
 <template>
   <div>
+    <div>
+      手机号: <input type="text" v-model="phone"><br>
+      验证码: <input type="text" v-model="code">
+      <button @click="sendCode">发送验证码</button><br>
+      <button @click="login">登陆</button>
+      <hr>
+      <p>登陆状态: {{status}}</p>
+    </div>
+
     <ele-header></ele-header>
 
     <div class="tab border-1px">
@@ -24,6 +33,35 @@
   import axios from 'axios'
   import header from './components/header/header.vue'
   export default {
+
+    data () {
+      return {
+        phone: '',
+        code: '',
+        status: '未登陆'
+      }
+    },
+    methods: {
+      sendCode() {
+        const url = `/api/sendcode?phone=${this.phone}`
+        axios.get(url).then(response => {
+          console.log('sendcode result ', response.data)
+        })
+      },
+
+      login() {
+        axios.post('/api/login', {phone: this.phone, code: this.code}).then(response => {
+          console.log('login result ', response.data)
+          const result = response.data
+          if (result.code == 0) {
+            const user = result.data
+            this.status = `登陆成功: ${user.phone}`
+          } else {
+            this.status = `登陆失败, 请输入正确的手机号和验证码`
+          }
+        })
+      }
+    },
 
     mounted () {
       // 发送ajax请求获取seller并更新状态
