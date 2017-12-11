@@ -4,7 +4,8 @@ import {
   RECEIVE_RATINGS,
   RECEIVE_SELLER,
   INCREMENT_FOOD_COUNT,
-  DECREMENT_FOOD_COUNT
+  DECREMENT_FOOD_COUNT,
+  CLEAR_CART_FOODS
 } from './types'
 
 export default {
@@ -33,5 +34,9 @@ export default {
     if(food.count) {
       food.count--
     }
+  },
+
+  [CLEAR_CART_FOODS] (state, {cartFoods}) {
+    cartFoods.forEach(food => food.count=0)
   }
 }

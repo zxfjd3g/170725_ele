@@ -4,7 +4,8 @@ import {
   RECEIVE_RATINGS,
   RECEIVE_SELLER,
   INCREMENT_FOOD_COUNT,
-  DECREMENT_FOOD_COUNT
+  DECREMENT_FOOD_COUNT,
+  CLEAR_CART_FOODS
 } from './types'
 // import * as api from '../api'
 
@@ -59,5 +60,9 @@ export default {
     } else {// 提交一个减少的请求
       commit(DECREMENT_FOOD_COUNT, {food})
     }
+  },
+
+  clearCart ({commit}, cartFoods) {
+    commit(CLEAR_CART_FOODS, {cartFoods})
   }
 }

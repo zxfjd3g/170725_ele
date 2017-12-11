@@ -35,7 +35,8 @@
         <div class="shopcart-list" v-show="listShow">
           <div class="list-header">
             <h1 class="title">购物车</h1>
-            <span class="empty">清空</span>
+            <!--<span class="empty">清空</span>-->
+            <mt-button type="primary" style="float: right" @click.native="clear">清空</mt-button>
           </div>
 
           <div class="list-content" ref="foods">
@@ -63,6 +64,8 @@
   import PubSub from 'pubsub-js'
   import BScroll from 'better-scroll'
   import {mapGetters, mapState} from 'vuex'
+  import { MessageBox, Toast} from 'mint-ui'
+
   import cartcontrol from '../cartcontrol/cartcontrol.vue'
 
   export default {
@@ -150,6 +153,25 @@
     },
 
     methods: {
+
+      clear () {
+        MessageBox.confirm('确定清空吗?').then(
+          action => {
+            // 清空购物车
+            this.$store.dispatch('clearCart', this.cartFoods)
+            // 提示清空成功
+            Toast({
+              message: '清空成功',
+              position: 'middle',
+              duration: 1000
+            })
+          },
+          action => {
+            //不需要做什么
+          }
+        )
+      },
+
       toggleShow () {
         this.isShow = !this.isShow
       },

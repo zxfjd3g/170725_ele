@@ -154,6 +154,7 @@
         PubSubJS(消息订阅与发布/全局事件总线)
     5). 强制重排与重绘
         https://www.cnblogs.com/zichi/p/4720000.html
+
 ## 2. 项目优化
 ## 3. 百度地图API
 ## 4. 短信验证登陆功能
