@@ -23,7 +23,8 @@
                     :key="index"
                     v-on:before-enter="beforeEnter"
                     v-on:enter="enter"
-                    v-on:after-enter="afterEnter">
+                    v-on:after-enter="afterEnter"
+                    :css="false">
           <div class="ball" v-show="ball.isShow">
             <div class="inner inner-hook"></div>
           </div>
@@ -59,6 +60,7 @@
 </template>
 
 <script>
+  import PubSub from 'pubsub-js'
   import BScroll from 'better-scroll'
   import {mapGetters, mapState} from 'vuex'
   import cartcontrol from '../cartcontrol/cartcontrol.vue'
@@ -75,8 +77,24 @@
           {isShow: false},
           {isShow: false},
           {isShow: false}
-        ]
+        ],
+        droppingBalls: []   // 保存所有显示小球所对应的ball的数组
       }
+    },
+
+    mounted () {
+      //订阅消息
+      PubSub.subscribe('startDrop', (message, startEl) => {
+        // 找出一个隐藏的小球, 将其显示
+        const ball = this.balls.find(ball => !ball.isShow)
+        if(ball) {
+          ball.isShow = true
+          // 保存startEl到对应的ball
+          ball.startEl = startEl
+          // 保存ball到droppingBalls
+          this.droppingBalls.push(ball)
+        }
+      })
     },
 
     computed: {
@@ -138,22 +156,51 @@
 
       // 在开始显示动画之前调用, 指定起始时的样式状态
       beforeEnter (el) { // el是发生动画的ball div
+        console.log('beforeEnter()')
+        // 得到对应的ball
+        const ball = this.droppingBalls.shift()
+        const startEl = ball.startEl
+
 
         let offsetX = 0
         let offsetY = 0
         // 计算
+        const elLeft = 32
+        const elBootom = 22
 
+        const rect = startEl.getBoundingClientRect()
+        const startElLeft = rect.left
+        const startElTop = rect.top
 
-        el.style.transform = `translateX(${offsetX}px)`
-        el.children[0].style.transform = `translate(${offsetY}px)`
+        offsetX = startElLeft-elLeft
+        offsetY = -(window.innerHeight-startElTop-elBootom)
+
+        el.style.transform = `translateY(${offsetY}px)`
+        el.children[0].style.transform = `translateX(${offsetX}px)`
+
+        // 保存ball到el
+        el.ball = ball
       },
       // 在开始进入时调用, 指定结束时的样式状态
       enter (el) { // el是发生动画的ball div
+        console.log('enter()')
 
+        // 强制重排重绘
+        const temp = el.clientHeight
+
+        // 当前帧更新之后指定行: 否则会立即起效果
+        this.$nextTick(() => {
+          el.style.transform = 'translateX(0)'
+          el.children[0].style.transform = 'translateY(0)'
+        })
       },
       // 在进入动画结束时调用, 隐藏小球
       afterEnter (el) { // el是发生动画的ball div
-
+        console.log('afterEnter()')
+        // 找到对应的ball
+        setTimeout(() => {
+          el.ball.isShow = false
+        }, 400)
       }
     },
 
